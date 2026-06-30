@@ -31,7 +31,6 @@ jobs:
 
     - name: Limpiar saltos de linea de Windows (Dos2Unix)
       run: |
-        # Esto elimina cualquier caracter oculto de Windows que rompa Buildozer
         dos2unix buildozer.spec
         dos2unix main.py
 
@@ -45,6 +44,11 @@ jobs:
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
         yes | buildozer android pdm --add-license "android-sdk-license" || true
+
+    - name: Limpiar Cache Vieja de Buildozer
+      run: |
+        # Esto borra cualquier rastro de la version vieja r25c para que no choque
+        buildozer android clean
 
     - name: Compilar con Buildozer
       run: |
