@@ -71,7 +71,8 @@ osx.python_version = 3
 osx.kivy_version = 2.3.0
 
 #
-# Android specific
+# android.ndk = 25c
+
 #
 
 # (bool) Indicate if the application should be fullscreen or not
