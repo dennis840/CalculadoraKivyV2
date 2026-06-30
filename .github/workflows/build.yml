@@ -18,10 +18,10 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Instalar dependencias del sistema
+    - name: Instalar dependencias del sistema y Dos2Unix
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev libsqlite3-dev
+        sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev libsqlite3-dev dos2unix
         sudo apt-get install -y openjdk-17-jdk unzip zip
 
     - name: Instalar Buildozer y Cython
@@ -29,9 +29,14 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython virtualenv kivy
 
+    - name: Limpiar saltos de linea de Windows (Dos2Unix)
+      run: |
+        # Esto elimina cualquier caracter oculto de Windows que rompa Buildozer
+        dos2unix buildozer.spec
+        dos2unix main.py
+
     - name: Ajustar archivo spec automaticamente
       run: |
-        # Forzar que acepte licencias y use la api estable
         sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
         sed -i 's/android.api = 33/android.api = 33/' buildozer.spec
 
