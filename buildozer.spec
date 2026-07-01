@@ -25,7 +25,6 @@ android.ndk = 25c
 android.ndk_api = 24
 
 android.accept_sdk_license = True
-android.skip_update = True
 
 android.archs = arm64-v8a
 
