@@ -29,17 +29,24 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython virtualenv kivy
 
-    - name: Limpiar saltos de linea de Windows (Dos2Unix)
+    - name: Generar configuracion limpia desde cero
       run: |
-        dos2unix buildozer.spec
-        dos2unix main.py
-
-    - name: Ajustar archivo spec automaticamente
-      run: |
+        # Borramos el archivo problemático viejo
+        rm -f buildozer.spec
+        # Le ordenamos a Buildozer crear un archivo base nuevo y reluciente
+        buildozer init
+        # Configurar las líneas exactas para que compile sin errores en GitHub
+        sed -i 's/title = My Application/title = Calculadora/' buildozer.spec
+        sed -i 's/package.name = myapp/package.name = calculadora/' buildozer.spec
+        sed -i 's/package.domain = org.test/package.domain = org.dennis/' buildozer.spec
+        sed -i 's/requirements = python3,kivy/requirements = python3,kivy/' buildozer.spec
         sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
-        sed -i 's/android.api = 33/android.api = 33/' buildozer.spec
-        # Forzar una sola arquitectura para evitar el Error Code 1
-        sed -i 's/android.archs =.*/android.archs = arm64-v8a/' buildozer.spec
+        sed -i 's/android.api = 31/android.api = 33/' buildozer.spec
+        sed -i 's/#android.archs = arm64-v8a/android.archs = arm64-v8a/' buildozer.spec
+
+    - name: Limpiar saltos de linea en main.py
+      run: |
+        dos2unix main.py
 
     - name: Compilar con Buildozer
       run: |
