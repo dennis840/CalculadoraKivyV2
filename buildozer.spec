@@ -15,8 +15,6 @@ orientation = portrait
 
 fullscreen = 0
 
-presplash.filename = calcu.png
-icon.filename = calcu.png
 
 android.api = 33
 android.minapi = 24
