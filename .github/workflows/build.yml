@@ -42,20 +42,15 @@ jobs:
         # Forzar la aceptación de licencias y la API de Android correcta
         sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
         sed -i 's/android.api = 31/android.api = 33/' buildozer.spec
-        
-        # ELIMINACIÓN BLINDADA: Borra cualquier línea que contenga "android.archs" (con o sin # o espacios)
-        sed -i '/android.archs/d' buildozer.spec
-        
-        # Inyectar la arquitectura única de 64 bits de forma limpia al final
-        echo "android.archs = arm64-v8a" >> buildozer.spec
 
     - name: Limpiar saltos de linea en main.py
       run: |
         dos2unix main.py
 
-    - name: Compilar con Buildozer (Modo Detallado)
+    - name: Compilar con Buildozer (Forzando Arquitectura Única)
       run: |
-        buildozer --log_level=2 android debug
+        # Usamos "p4a.local_architectures" para sobreescribir por completo el error de las dos arquitecturas
+        buildozer --log_level=2 android debug -- --p4a.local_architectures=arm64-v8a
       continue-on-error: false
 
     - name: Subir APK Generado
