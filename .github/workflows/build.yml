@@ -46,10 +46,9 @@ jobs:
         osx.kivy_version = 2.1.0
         fullscreen = 0
         
-        # Configuracion Estricta de Android (Corregida sin linea obsoleta)
+        # Configuracion de Android corregida para evitar el error 404 de Google
         android.api = 33
         android.minapi = 24
-        android.ndk = 27.3.13750724
         android.accept_sdk_license = True
         android.skip_update = False
         
