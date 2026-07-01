@@ -29,16 +29,20 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython virtualenv kivy
 
-    - name: Crear configuracion estricta sin duplicados
+    - name: Crear configuracion estricta en la ruta correcta
       run: |
+        # Nos aseguramos de borrar cualquier archivo viejo si existiera fuera
         rm -f buildozer.spec
         
+        # Creamos el archivo de configuración perfecto
         cat << 'EOF' > buildozer.spec
         [app]
         title = Calculadora
         package.name = calculadora
         package.domain = org.dennis
-        source.dir = .
+        
+        # CRUCIAL: Le indicamos a Buildozer que tu codigo está dentro de esa carpeta de GitHub
+        source.dir = .github/workflows
         source.include_exts = py,png,jpg,kv,atlas
         version = 0.1
         requirements = python3,kivy
@@ -46,13 +50,11 @@ jobs:
         osx.kivy_version = 2.1.0
         fullscreen = 0
         
-        # Configuracion de Android corregida para evitar el error 404 de Google
+        # Configuracion de Android Automatizada
         android.api = 33
         android.minapi = 24
         android.accept_sdk_license = True
         android.skip_update = False
-        
-        # ARQUITECTURA UNICA
         android.archs = arm64-v8a
         
         [buildozer]
@@ -62,7 +64,7 @@ jobs:
 
     - name: Limpiar saltos de linea en main.py
       run: |
-        dos2unix main.py
+        dos2unix .github/workflows/main.py
 
     - name: Compilar con Buildozer Minucioso
       run: |
