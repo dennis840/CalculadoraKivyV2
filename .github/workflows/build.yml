@@ -34,17 +34,19 @@ jobs:
         rm -f buildozer.spec
         buildozer init
         
-        # Modificaciones directas sobre el archivo spec recién creado
+        # Modificaciones básicas de la App
         sed -i 's/title = My Application/title = Calculadora/' buildozer.spec
         sed -i 's/package.name = myapp/package.name = calculadora/' buildozer.spec
         sed -i 's/package.domain = org.test/package.domain = org.dennis/' buildozer.spec
         
-        # Forzar la aceptación de licencias y la API correcta
+        # Forzar la aceptación de licencias y la API de Android correcta
         sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
         sed -i 's/android.api = 31/android.api = 33/' buildozer.spec
         
-        # Eliminar cualquier rastro viejo de arquitecturas y dejar solo arm64-v8a
-        sed -i '/android.archs =/d' buildozer.spec
+        # ELIMINACIÓN BLINDADA: Borra cualquier línea que contenga "android.archs" (con o sin # o espacios)
+        sed -i '/android.archs/d' buildozer.spec
+        
+        # Inyectar la arquitectura única de 64 bits de forma limpia al final
         echo "android.archs = arm64-v8a" >> buildozer.spec
 
     - name: Limpiar saltos de linea en main.py
@@ -53,7 +55,6 @@ jobs:
 
     - name: Compilar con Buildozer (Modo Detallado)
       run: |
-        # Añadimos la opción log_level=2 para que nos muestre el error real sin ocultar nada
         buildozer --log_level=2 android debug
       continue-on-error: false
 
