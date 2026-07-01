@@ -51,9 +51,10 @@ jobs:
       run: |
         dos2unix main.py
 
-    - name: Compilar con Buildozer
+    - name: Compilar con Buildozer (Modo Detallado)
       run: |
-        buildozer -v android debug
+        # Añadimos la opción log_level=2 para que nos muestre el error real sin ocultar nada
+        buildozer --log_level=2 android debug
       continue-on-error: false
 
     - name: Subir APK Generado
