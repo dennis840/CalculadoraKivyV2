@@ -31,18 +31,21 @@ jobs:
 
     - name: Generar configuracion limpia desde cero
       run: |
-        # Borramos el archivo problemático viejo
         rm -f buildozer.spec
-        # Le ordenamos a Buildozer crear un archivo base nuevo y reluciente
         buildozer init
-        # Configurar las líneas exactas para que compile sin errores en GitHub
+        
+        # Modificaciones directas sobre el archivo spec recién creado
         sed -i 's/title = My Application/title = Calculadora/' buildozer.spec
         sed -i 's/package.name = myapp/package.name = calculadora/' buildozer.spec
         sed -i 's/package.domain = org.test/package.domain = org.dennis/' buildozer.spec
-        sed -i 's/requirements = python3,kivy/requirements = python3,kivy/' buildozer.spec
+        
+        # Forzar la aceptación de licencias y la API correcta
         sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
         sed -i 's/android.api = 31/android.api = 33/' buildozer.spec
-        sed -i 's/#android.archs = arm64-v8a/android.archs = arm64-v8a/' buildozer.spec
+        
+        # Eliminar cualquier rastro viejo de arquitecturas y dejar solo arm64-v8a
+        sed -i '/android.archs =/d' buildozer.spec
+        echo "android.archs = arm64-v8a" >> buildozer.spec
 
     - name: Limpiar saltos de linea en main.py
       run: |
